@@ -185,6 +185,10 @@ uploadProgressPercent sent size =
         numStr ++ "%"
 
 
+
+-- View
+
+
 view : Model -> Element Msg
 view model =
     case model of
