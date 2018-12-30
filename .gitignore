@@ -1,3 +1,5 @@
 elm-stuff
 infrastructure
-src/Reactor.elm
+env
+elm.js
+elm.min.js

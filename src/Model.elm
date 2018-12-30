@@ -1,4 +1,4 @@
-module Model exposing (Model, Msg(..), envDecoder)
+module Model exposing (Model, Msg(..))
 
 import Email
 import Http
@@ -7,8 +7,7 @@ import Video
 
 
 type alias Model =
-    { env : { apiUrl : String }
-    , email : Email.Model
+    { email : Email.Model
     , videoState : Video.Model
     }
 
@@ -16,10 +15,3 @@ type alias Model =
 type Msg
     = EmailMsg Email.Msg
     | VideoMsg Video.Msg
-
-
-envDecoder : Decode.Decoder { apiUrl : String }
-envDecoder =
-    Decode.map
-        (\apiUrl -> { apiUrl = apiUrl })
-        Decode.string

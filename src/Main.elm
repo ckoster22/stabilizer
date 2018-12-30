@@ -1,14 +1,13 @@
-module Main exposing (init, main, subscriptions, update, view)
+module Main exposing (main)
 
 import Browser exposing (Document)
 import Element exposing (Element, column, fill, height, spacing, width)
 import Email
-import Json.Decode as Decode
 import Model exposing (Model, Msg(..))
 import Video
 
 
-main : Program Decode.Value Model Msg
+main : Program () Model Msg
 main =
     Browser.document
         { init = init
@@ -18,19 +17,9 @@ main =
         }
 
 
-init : Decode.Value -> ( Model, Cmd Msg )
+init : () -> ( Model, Cmd Msg )
 init flags =
-    let
-        parsedEnv =
-            case Decode.decodeValue Model.envDecoder flags of
-                Ok env ->
-                    env
-
-                Err error ->
-                    Debug.log (Decode.errorToString error) { apiUrl = "" }
-    in
-    ( { env = parsedEnv
-      , email = Email.initialModel
+    ( { email = Email.initialModel
       , videoState = Video.initialModel
       }
     , Cmd.none
@@ -81,7 +70,6 @@ update msg model =
                     Video.update
                         videoMsg
                         model.videoState
-                        model.env.apiUrl
                         (Email.emailAddress model.email)
             in
             ( { model | videoState = vidState }, Cmd.map VideoMsg cmd )

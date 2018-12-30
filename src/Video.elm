@@ -4,6 +4,7 @@ import Element exposing (Element, centerX, centerY, column, el, fill, height, pa
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import Environment
 import File exposing (File)
 import File.Select as Select
 import Http exposing (Error(..), Progress(..))
@@ -68,14 +69,14 @@ initialModel =
 -- Update
 
 
-update : Msg -> Model -> String -> String -> ( Model, Cmd Msg )
-update msg model apiUrl email =
+update : Msg -> Model -> String -> ( Model, Cmd Msg )
+update msg model email =
     case msg of
         UploadButtonClick ->
             ( model, select )
 
         OnFileSelected video ->
-            ( Selected video RetrievingUrl, retrieveSignedUrl apiUrl video email )
+            ( Selected video RetrievingUrl, retrieveSignedUrl video email )
 
         OnInvalidFileSelected ->
             ( NoVideoError, Cmd.none )
@@ -108,11 +109,11 @@ select =
     Select.file [ "video/mp4" ] validateSelectedFile
 
 
-retrieveSignedUrl : String -> Video -> String -> Cmd Msg
-retrieveSignedUrl apiUrl video email =
+retrieveSignedUrl : Video -> String -> Cmd Msg
+retrieveSignedUrl video email =
     Http.get
         { url =
-            apiUrl
+            Environment.apiUrl
                 ++ UrlBuilder.toQuery
                     [ UrlBuilder.string "name" (name video)
                     , UrlBuilder.string "email" email
